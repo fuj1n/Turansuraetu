@@ -1,0 +1,71 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Turansuraetu"
+        xmlns:Accessibility="clr-namespace:Accessibility;assembly=Accessibility"
+        xmlns:turansuraetu="clr-namespace:Turansuraetu"
+        x:Class="Turansuraetu.MainWindow"
+        mc:Ignorable="d"
+        Closing="MainWindow_OnClosing"
+        Title="Turansuraetu" Height="720" Width="1280" WindowStartupLocation="CenterScreen">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open Project" Click="OpenProject_Clicked"/>
+                <MenuItem Header="_Save Project" Click="SaveProject_Clicked"/>
+                <Separator/>
+                <MenuItem Header="E_xit" Click="Exit_Clicked"/>
+            </MenuItem>
+            <MenuItem Name="SectionSwitcher"  Header="_Section"/>
+            <MenuItem Header="_Translate">
+                <MenuItem Name="DoGoogle" Header="Google Translation?" IsChecked="True" IsCheckable="True"/>
+                <MenuItem Name="DoBing" Header="Bing Translation?" IsChecked="True" IsCheckable="True"/>
+                <Separator/>
+                <MenuItem Name="DoOverwrite" Header="Overwrite existing translations" IsCheckable="True"/>
+                <Separator/>
+                <MenuItem Header="_Batch Translate" Click="Translate_Batch_Clicked"/>
+                <MenuItem Header="_Clear Translations" Click="Translations_Clear_Clicked"/>
+            </MenuItem>
+            <MenuItem Header="_RPGMakerTrans">
+                <MenuItem Header="_Apply Patch" Click="RpgMkTrans_ApplyPatch_Clicked"/>
+                <MenuItem Header="_Create Patch" Click="RpgMkTrans_CreatePatch_Clicked"/>
+                <Separator/>
+                <MenuItem Header="_Set Executable" Click="RpgMkTrans_SetExe_Clicked"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" Click="About_Clicked"/>
+            </MenuItem>
+        </Menu>
+        <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <DataGrid x:Name="TranslateData" AlternationCount="2" FontFamily="VL Gothic" ItemsSource="{Binding}" AutoGenerateColumns="False" SelectionUnit="Cell" FontSize="11" ContextMenuOpening="UpdateGridContextMenu">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Name="CtxMenuTranslateCurrent" Header="Translate this line" Click="TranslateCurrentLine"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.RowBackground>
+                    <Brush>White</Brush>
+                </DataGrid.RowBackground>
+                <DataGrid.AlternatingRowBackground>
+                    <Brush>LightBlue</Brush>
+                </DataGrid.AlternatingRowBackground>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Original Text" IsReadOnly="True" Binding="{Binding Original}"/>
+                    <DataGridTextColumn Header="Context" IsReadOnly="True" Binding="{Binding ContextPreview}"/>
+                    <DataGridTextColumn Header="Final Translation" Binding="{Binding Translation}">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <EventSetter Event="KeyDown" Handler="OnTypeInTextbox"/>
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Google Translate" IsReadOnly="True" Binding="{Binding Machine.Google}"/>
+                    <DataGridTextColumn Header="Bing Translate" IsReadOnly="True" Binding="{Binding Machine.Bing}"/>
+                    <DataGridTextColumn Header="Transliteration" IsReadOnly="True" Binding="{Binding Machine.Transliteration}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+    </DockPanel>
+</Window>
